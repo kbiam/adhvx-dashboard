@@ -17,7 +17,7 @@ type FormData = {
   phoneNumber: string;
 };
 
-export const Login = () => {
+export const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();

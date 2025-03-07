@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { Login } from "./pages/login";
 import { HomeLayout } from "./layout/home.layout";
-import { CircuitBoardIcon, Home, LineChart, UserPenIcon } from "lucide-react";
+import { CircuitBoardIcon, Home, icons, LineChart, UserPenIcon } from "lucide-react";
 import { PrivateRoute } from "./routes/protected";
 import { ProfileSettings } from "./pages/profile_settings";
 import { SettingLayout } from "./layout/setting.layout";
@@ -14,6 +14,8 @@ import { UserManagement } from "./pages/account_settings/user_management";
 import { ResetPassword } from "./pages/reset_password";
 import { DataExplorer } from "./pages/data_explorer";
 import { Dashboard } from "./pages/dashboard";
+import { SignUp } from "./pages/signup";
+import DeviceManagement from "./pages/device_management";
 
 const navItems = [
   {
@@ -27,6 +29,11 @@ const navItems = [
     link: "explorer",
     icon: LineChart,
   },
+  {
+    label:"Device Management",
+    link:"devices",
+    icon: CircuitBoardIcon
+  }
 ];
 
 const accountSettingItems = [
@@ -47,11 +54,13 @@ export const AppRoutes = () => {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/" element={<HomeLayout navItems={navItems} />}>
           <Route element={<PrivateRoute />}>
             <Route path="dashboard" element={<Dashboard/>} />
             <Route path="explorer" element={<DataExplorer />} />
+            <Route path="devices" element={<DeviceManagement />} />
             <Route path="profilesettings" element={<ProfileSettings />} />
           </Route>
           <Route element={<PrivateRoute role="admin" />}>

@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar, NavbarProps } from "@/custom_components/leftnav";
-const noPaddingRoutes = ["/accountsettings",'/dashboard'];
+const noPaddingRoutes = ["/accountsettings",'/dashboard','/devices'];
 
 export function HomeLayout(props: NavbarProps) {
   const location = useLocation();

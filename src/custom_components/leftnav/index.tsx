@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   TooltipProvider,
@@ -5,7 +6,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { LucideProps, Settings } from "lucide-react";
+import { LucideProps, Settings, Menu, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,46 +36,105 @@ export interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   const { navItems } = props;
   const { pathname } = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-      <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
-        <Link
-          to="#"
-          className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-        >
-          <img
-            className="rounded-full"
-            src="/scifi_logo.jpg"
-            alt="Sci-Fi Logo"
-          />
-        </Link>
-        <TooltipProvider>
-          {navItems.map((item) => (
-            <Tooltip key={item.label}>
-              <TooltipTrigger asChild>
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-14 flex-col border-r bg-background sm:flex">
+        <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
+          <Link
+            to="#"
+            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
+          >
+            <img
+              className="rounded-full"
+              src="/scifi_logo.jpg"
+              alt="Sci-Fi Logo"
+            />
+          </Link>
+          <TooltipProvider>
+            {navItems.map((item) => (
+              <Tooltip key={item.label}>
+                <TooltipTrigger asChild>
+                  <Link
+                    to={item.link}
+                    className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
+                      pathname.includes(item.link)
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span className="sr-only">{item.label}</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right">{item.label}</TooltipContent>
+              </Tooltip>
+            ))}
+          </TooltipProvider>
+        </nav>
+        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
+          <ThemeToggle />
+          <SettingsMenu />
+        </nav>
+      </aside>
+
+      {/* Mobile Navbar */}
+      <header className="fixed top-0 left-0 z-20 w-full border-b bg-background sm:hidden">
+        <div className="flex h-14 items-center justify-between px-4">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <span className="sr-only">Toggle menu</span>
+            </button>
+            <Link
+              to="#"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary"
+            >
+              <img
+                className="rounded-full"
+                src="/scifi_logo.jpg"
+                alt="Sci-Fi Logo"
+              />
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <SettingsMenu />
+          </div>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="absolute top-14 left-0 w-full border-b bg-background px-4 py-2 shadow-md">
+            <nav className="flex flex-col space-y-2">
+              {navItems.map((item) => (
                 <Link
+                  key={item.label}
                   to={item.link}
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8 ${
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 transition-colors ${
                     pathname.includes(item.link)
                       ? "bg-accent text-accent-foreground"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
                   }`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   <item.icon className="h-5 w-5" />
-                  <span className="sr-only">{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                 </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">{item.label}</TooltipContent>
-            </Tooltip>
-          ))}
-        </TooltipProvider>
-      </nav>
-      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
-        <ThemeToggle />
-        <SettingsMenu />
-      </nav>
-    </aside>
+              ))}
+            </nav>
+          </div>
+        )}
+      </header>
+      
+      {/* Spacer for mobile layout */}
+      <div className="h-14 sm:hidden" />
+    </>
   );
 };
 
@@ -85,34 +145,34 @@ function SettingsMenu() {
     useUserStore.setState({});
     window.location.href = "/login";
   }
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <span className="flex items-center">
+      <span className="flex items-center">
           <Settings className="h-5 w-5" />
           <span className="sr-only">Settings</span>
         </span>
+
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>My Profile</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Link className="text-primary w-full" to="profilesettings">
+          <DropdownMenuItem asChild>
+            <Link className="w-full text-primary" to="profilesettings">
               Preference
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Link className="text-primary w-full" to="accountsettings">
+          <DropdownMenuItem asChild>
+            <Link className="w-full text-primary" to="accountsettings">
               Account Settings
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-
         <DropdownMenuItem onClick={handleLogOut}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
