@@ -37,11 +37,14 @@ import {
   MoreHorizontal,
   Star,
   RefreshCcw,
-  ChevronDown
+  ChevronDown,
+  Trash2,
+  Pencil
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import AddDevice from './AddDevice'
 import AutoConfig from './AutoConfig'
+import EditDeviceDialog from './EditDeviceDialog'
 
 
 // Define the Device type
@@ -109,6 +112,21 @@ const DeviceManagement = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  // State for edit dialog
+    const [editDialogOpen, setEditDialogOpen] = useState(false)
+    const [currentDevice, setCurrentDevice] = useState<Device | null>(null)
+
+    // Function to handle edit action
+  const handleEdit = (device: Device) => {
+    setCurrentDevice(device)
+    setEditDialogOpen(true)
+  }
+    // Function to save edited device
+    const handleSaveEdit = (updatedDevice: Device) => {
+        console.log(updatedDevice)
+        setEditDialogOpen(false)
+      }
 
   // State for connection status filter
 const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<string[]>([])
@@ -250,8 +268,46 @@ const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<str
     },
     {
       accessorKey: "connectivity",
-      header: "Device Connectivity",
-      cell: ({ row }) => <div className='flex'>{row.getValue("connectivity")}</div>,
+      header: ()=>(
+        <div className=' flex justify-center'>
+Device Connectivity
+        </div>),
+      cell: ({ row }) => <div className='flex justify-center'>{row.getValue("connectivity")}</div>,
+    },
+    {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+          const device = row.original
+          
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem 
+                  onClick={() => handleEdit(device)}
+                  className="flex items-center cursor-pointer"
+                >
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleDelete(device.id)}
+                  className="flex items-center cursor-pointer text-red-600 hover:!bg-red-50 focus:!bg-red-50"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        },
     },
 
   ]
@@ -278,6 +334,10 @@ const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<str
 
   const refresh = ()=>{
     console.log("Refreshed")
+  }
+
+  const handleDelete = (deviceID:string)=>{
+    console.log("deleted",deviceID)
   }
 
   return (
@@ -413,6 +473,13 @@ const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<str
           </div>
         </div>
       </div>
+            {/* Import the EditDeviceDialog component */}
+        <EditDeviceDialog
+        open={editDialogOpen}
+        device={currentDevice}
+        onOpenChange={setEditDialogOpen}
+        onSave={handleSaveEdit}
+      />
     </div>
   )
 }
