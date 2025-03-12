@@ -9,7 +9,7 @@ import { CircularProgressbar,buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Input } from "@/components/ui/input";
 import { useTheme } from "@/custom_components/theme_provider";
-import { ArrowRight, CircuitBoardIcon, CpuIcon, Settings, Wallet, PackageOpen,IndianRupee, Clock, Timer, Zap, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
+import { ArrowRight, CircuitBoardIcon, CpuIcon, Settings, Wallet, PackageOpen,IndianRupee, Clock, Timer, Zap, CheckCircle2, AlertTriangle, AlertCircle, ClipboardCheck, CheckCircle, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -160,9 +160,9 @@ export const Dashboard = () => {
 
   return (
     <div className="flex flex-col h-full lg:flex-row lg:h-screen  bg-gray-50 dark:bg-[#151515] text-gray-900 dark:text-gray-100">
-      <div className="w-full lg:w-80 xl:w-96 flex flex-col gap-6 h-full p-4 border-r border-gray-200 dark:border-[#1f1f1f] bg-white dark:bg-[#121212] shadow-sm">
+      <div className="w-full lg:w-80 xl:w-80 flex flex-col gap-6 h-full p-4 border-r border-gray-200 dark:border-[#1f1f1f] bg-white dark:bg-[#121212] shadow-sm">
         <div className="w-full flex gap-4 items-center justify-center ">
-          <img className="w-[40%] h-[80%]" src={theme === "light"?"/logos/ADHVX-Logo.png":"/logos/ADHVX-WLogo (1).png"} alt="" /> 
+          <img className="w-[40%] h-[60%]" src={theme === "light"?"/logos/ADHVX-Logo.png":"/logos/ADHVX-WLogo (1).png"} alt="" /> 
           <h1 className="text-2xl"> | Dashboard</h1>
         </div>
 
@@ -191,24 +191,32 @@ export const Dashboard = () => {
         
       </div>
       <div className="w-full lg:w-[75%] h-full  flex flex-col gap-4  overflow-auto p-4">
-        <div className="flex flex-col  items-center gap-4 md:gap-0 md:items-stretch">
-            <div className="flex items-center gap-4  justify-end">
-              <button className="px-6 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                Manage
-              </button>
-              <button className="p-2 rounded-full bg-card hover:bg-gray-200 dark:hover:bg-gray-700">
-                <Settings className="w-5 h-5" />
-              </button>
+        <div className="flex flex-col  items-center gap-4 md:gap-4 md:items-stretch ">
+            <div className="flex items-center gap-4  justify-end ">
+              <div className="items-center hidden">
+                <p className="text-2xl font-medium">Dashboard</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <button className="px-6 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Manage
+                </button>
+                <button className="px-6 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  User Management
+                </button>
+                <button className="p-2 rounded-full bg-card hover:bg-gray-200 dark:hover:bg-gray-700">
+                  <Settings className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-            <div className="flex gap-2 md:gap-4 mb-2 overflow-x-auto">
+            <div className="flex gap-2 md:gap-10 mb-2 overflow-x-auto  w-fit border-b-2 border-black/10 dark:border-white/10">
             {['Overall Performance', 'Statistics', 'Log Data'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setSelectedTab(tab)}
-                className={`px-4 md:px-8 py-2 rounded-lg transition-colors text-sm focus:outline-none border ${
+                className={`px-4 md:px-0 py-2  transition-colors text-sm focus:outline-none  ${
                   selectedTab === tab
-                    ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50'
-                  : 'bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border-gray-300 dark:border-gray-700'
+                    ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-transparent dark:bg-transparent border-b-2'
+                  : 'bg-transparent dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 border-gray-300 dark:border-gray-700'
                 }`}
               >
                 {tab}
@@ -278,26 +286,26 @@ export const Dashboard = () => {
                     <div className="flex flex-row md:flex-row gap-6 md:gap-8 items-start w-full md:w-1/2 justify-around">
                       <div className="text-left flex flex-col items-start gap-2 w-full md:w-1/3">
                         <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
-                          <Wallet className="text-blue-600 dark:text-blue-400" size={18}/>
+                          <ClipboardCheck className="text-blue-600 dark:text-blue-400" size={18}/>
                         </div>
                         <p className="text-xl font-medium text-blue-600 dark:text-blue-400">$5.3k</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Money Saved</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Open Work Orders</p>
                       </div>
                       
                       <div className="text-left flex flex-col items-start gap-2 w-full md:w-1/3">
                         <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900">
-                          <PackageOpen className="text-red-600 dark:text-red-400" size={18}/>
+                          <CheckCircle className="text-red-600 dark:text-red-400" size={18}/>
                         </div>
                         <p className="text-xl font-medium text-red-600 dark:text-red-400">$25k</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Cost of Consumables</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Completed Work Orders</p>
                       </div>
                       
                       <div className="text-left flex flex-col items-start gap-2 w-full md:w-1/3">
                         <div className="p-2 rounded-lg bg-purple-100 dark:bg-purple-900">
-                          <IndianRupee className="text-purple-600 dark:text-purple-400" size={18}/>
+                          <MessageCircle className="text-purple-600 dark:text-purple-400" size={18}/>
                         </div>
                         <p className="text-xl font-medium text-purple-600 dark:text-purple-400">$8k</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Maintenance Costs</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Service Requests</p>
                       </div>
                     </div>
                 </div>
@@ -436,7 +444,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
   pathColor,
   trailColor = isDark?"#151515":"#e6e6e6",
   textColor = isDark?"#cdcdcd":"#333",
-  textSize = "20px",
+  textSize = "17px",
   animationDuration = 0.5
 }) =>{
   return(
@@ -446,7 +454,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
           <h3 className="text-base font-semibold">{title}</h3>
           {Icon}
         </div>
-        <div className="w-20 h-20 lg:w-24 lg:h-24 flex mx-auto ">
+        <div className="w-20 h-20 lg:w-[100px] lg:h-[100px] flex mx-auto font-medium">
           <CircularProgressbar
             value={value}
             text={text}
@@ -457,6 +465,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
               trailColor: trailColor,
               backgroundColor: '#fff',
               pathTransitionDuration: animationDuration,
+              
             })}
           />
         </div>

@@ -119,6 +119,7 @@ const DeviceManagement = () => {
 
     // Function to handle edit action
   const handleEdit = (device: Device) => {
+    console.log(device)
     setCurrentDevice(device)
     setEditDialogOpen(true)
   }
@@ -241,8 +242,8 @@ const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<str
 
       },
     {
-      accessorKey: "product",
-      header: "Product",
+      accessorKey: "UID",
+      header: "UID",
       cell: ({ row }) => <div className='flex'>{row.getValue("product")}</div>,
     },
     {
@@ -253,13 +254,28 @@ const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<str
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => (
+      cell: ({ row }) => {
+        const status = String(row.getValue("status"));
+
+        const statusColors: Record<string, string> = {
+          Active: "bg-green-100 text-green-700",
+          Inactive: "bg-red-100 text-red-700",
+          Pending: "bg-orange-100 text-orange-700",
+
+        };
+        
+        // Default color if status is unknown
+        const bgColor = statusColors[status] || "bg-gray-100 text-gray-600";
+        
+        
+        return(
         <div className='flex'>
-        <span className="px-2 py-1 bg-green-100 text-green-600 rounded-full text-xs">
-          {row.getValue("status")}
+        <span className={`px-2 py-1 ${bgColor} text-green-600 rounded-full text-xs`}>
+          {status}
         </span>
         </div>
-      ),
+        )
+      },
     },
     {
       accessorKey: "type",
@@ -270,7 +286,7 @@ const [selectedConnectionStatuses, setSelectedConnectionStatuses] = useState<str
       accessorKey: "connectivity",
       header: ()=>(
         <div className=' flex justify-center'>
-Device Connectivity
+Device CAN Protocol
         </div>),
       cell: ({ row }) => <div className='flex justify-center'>{row.getValue("connectivity")}</div>,
     },
@@ -345,8 +361,8 @@ Device Connectivity
       {/* Header */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
         <div className="flex gap-4 items-center">
-          <h1 className="text-lg font-semibold">
-            All Devices ({table.getFilteredSelectedRowModel().rows.length} selected)
+          <h1 className="text-2xl font-semibold">
+            Device Management
           </h1>
           <Star className='w-4 h-4 cursor-pointer'/>
 

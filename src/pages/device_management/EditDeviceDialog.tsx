@@ -203,9 +203,9 @@ const EditDeviceDialog = ({
                         key={setting}
                         className={`h-8 text-xs w-28 ${
                           activeSetting === setting 
-                            ? 'bg-blue-800 hover:bg-blue-900' 
-                            : 'bg-blue-600 hover:bg-blue-700'
-                        } text-white`}
+                            ? 'bg-blue-600 hover:bg-blue-600 dark:text-white' 
+                            : 'border border-blue-600 bg-transparent text-black dark:text-white hover:bg-blue-700 hover:text-white '
+                        } `}
                         onClick={() => setActiveSetting(setting)}
                       >
                         {setting}
