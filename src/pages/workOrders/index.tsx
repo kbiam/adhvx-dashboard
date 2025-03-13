@@ -293,7 +293,7 @@ const WorkOrders = () => {
           <ActionButton
             label="Start WorkOrder"
             variant="default"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-mainBlue hover:bg-blue-700 text-white"
             onClick={() => startWorkOrder(order.id)}
           />
         );
@@ -328,7 +328,7 @@ const WorkOrders = () => {
             <ActionButton
               label="Re Open"
               variant="default"
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-mainBlue hover:bg-blue-700 text-white"
               onClick={() => reopenWorkOrder(order.id)}
             />
           </div>
@@ -339,7 +339,7 @@ const WorkOrders = () => {
   };
 
   return (
-    <div className="p-4 sm:p-4 md:py-6 bg-white dark:bg-[#121212] min-h-screen">
+    <div className="p-4 sm:p-4 md:py-6  min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
         <div className="flex gap-4 items-center">

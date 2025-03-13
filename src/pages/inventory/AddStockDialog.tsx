@@ -180,7 +180,7 @@ const AddStockDialog = ({ open, onOpenChange, onSave, categories }: AddStockDial
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} className='w-full sm:w-auto order-1 sm:order-2 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed'>Add Item</Button>
+          <Button onClick={handleSubmit} className='w-full sm:w-auto order-1 sm:order-2 bg-mainBlue text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed'>Add Item</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

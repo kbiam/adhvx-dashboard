@@ -60,7 +60,7 @@ export const Login = () => {
 
       <div className="max-w-full mx-auto p-4 h-full border rounded-lg border-black/20 dark:border-white/20 flex flex-col md:flex-row shadow-lg">
         <div className="hidden md:flex md:w-1/2 h-full bg-white dark:bg-black border-r border-black/50 dark:border-white/20 items-center justify-center">
-          <div className="text-4xl font-bold text-blue-600 dark:text-blue-300">ADHVX</div>
+          <div className="text-4xl font-bold text-mainBlue dark:text-blue-300">ADHVX</div>
         </div>
         
         <div className="w-full md:w-1/2 h-full flex flex-col px-4 md:px-12 py-8 gap-10 justify-center">
@@ -148,16 +148,16 @@ export const Login = () => {
 
               <div className="text-sm text-gray-600 dark:text-gray-400 text-left">
                 By signing up, I accept the ADHVX's{" "}
-                <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Terms of Service</a>
+                <a href="#" className="text-mainBlue dark:text-blue-400 hover:underline">Terms of Service</a>
                 {" "}and{" "}
-                <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Privacy Policy</a>
+                <a href="#" className="text-mainBlue dark:text-blue-400 hover:underline">Privacy Policy</a>
               </div>
 
               <Button
                 size={"lg"}
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all duration-200 mt-6 border-none"
+                className="w-full bg-blue-500 hover:bg-mainBlue dark:bg-mainBlue dark:hover:bg-blue-700 transition-all duration-200 mt-6 border-none"
               >
                 {isLoading && <Loader2Icon className="animate-spin mr-2" />}
                 <p className="text-white">Get Started!</p>
@@ -165,7 +165,7 @@ export const Login = () => {
 
               <div className="text-center text-sm text-gray-600 dark:text-gray-400">
                 Already have an account?{" "}
-                <a href="#" className="text-blue-600 dark:text-blue-400 hover:underline">Login</a>
+                <a href="#" className="text-mainBlue dark:text-blue-400 hover:underline">Login</a>
               </div>
             </form>
           </div>

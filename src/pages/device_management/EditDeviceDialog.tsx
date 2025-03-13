@@ -183,13 +183,13 @@ const EditDeviceDialog = ({
                   <div className="flex items-start gap-2">
                     <Button 
                       onClick={handleSave}
-                      className="bg-blue-600 hover:bg-blue-700 text-white h-8"
+                      className="bg-mainBlue hover:bg-blue-700 text-white h-8"
                     >
                       Refresh
                     </Button>
                     <Button 
                       onClick={handleSave}
-                      className="bg-blue-600 hover:bg-blue-700 text-white h-8"
+                      className="bg-mainBlue hover:bg-blue-700 text-white h-8"
                     >
                       Update
                     </Button>
@@ -203,8 +203,8 @@ const EditDeviceDialog = ({
                         key={setting}
                         className={`h-8 text-xs w-28 ${
                           activeSetting === setting 
-                            ? 'bg-blue-600 hover:bg-blue-600 dark:text-white' 
-                            : 'border border-blue-600 bg-transparent text-black dark:text-white hover:bg-blue-700 hover:text-white '
+                            ? 'bg-mainBlue hover:bg-mainBlue dark:text-white' 
+                            : 'border border-mainBlue bg-transparent text-black dark:text-white hover:bg-blue-700 hover:text-white '
                         } `}
                         onClick={() => setActiveSetting(setting)}
                       >
@@ -240,7 +240,7 @@ const EditDeviceDialog = ({
           </Button>
           <Button 
             onClick={handleSave}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-mainBlue hover:bg-blue-700 text-white"
           >
             Save Changes
           </Button>

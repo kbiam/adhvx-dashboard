@@ -167,8 +167,10 @@ export const DataExplorer = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
-        Data Explorer{" "}
+      <div className="flex justify-between items-center p-4 sm:p-4 md:py-6 ">
+      <h1 className="text-2xl font-semibold">
+            Data Explorer
+          </h1>
         <div className="flex gap-2 items-center">
           <Select
             value={viewType}

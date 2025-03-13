@@ -79,7 +79,7 @@ const OTAUpdates = () => {
   };
 
   return (
-    <div className="p-4 sm:p-4 md:py-6 bg-white dark:bg-[#121212] min-h-screen">
+    <div className="p-4 sm:p-4 md:py-6 min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
         <div className="flex gap-4 items-center">
@@ -130,7 +130,7 @@ const OTAUpdates = () => {
                 id="deviceID" 
                 value={deviceID} 
                 onChange={(e) => setDeviceID(e.target.value)}
-                className="bg-gray-100 dark:bg-gray-800"
+                className=""
               />
             </div>
             <div className="space-y-2 flex-1">
@@ -139,7 +139,7 @@ const OTAUpdates = () => {
                 id="boardType" 
                 value={boardType} 
                 onChange={(e) => setBoardType(e.target.value)}
-                className="bg-gray-100 dark:bg-gray-800"
+                className=""
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ const OTAUpdates = () => {
           <div className="mt-4">
             <div 
               className={`border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer
-                ${isDragging ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" : "border-gray-300 dark:border-gray-700"}
+                ${isDragging ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" : "border-gray-200 dark:border-primary-foreground"}
                 ${file ? "bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700" : ""}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -193,7 +193,7 @@ const OTAUpdates = () => {
 
           {/* Upload Button */}
           <Button 
-            className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white "
+            className="w-full mt-6 bg-mainBlue hover:bg-blue-700 text-white "
             disabled={!file || isUploading}
             onClick={handleUpload}
           >

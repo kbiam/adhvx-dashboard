@@ -57,7 +57,7 @@ const AddDevice: React.FC<AddDeviceDialogProps> = ({ onClaimDevice }) => {
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
-        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 focus:outline-none">
+        <button className="w-full bg-mainBlue hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 focus:outline-none">
           <Plus size={16} />
           Add Device
         </button>
@@ -120,7 +120,7 @@ const AddDevice: React.FC<AddDeviceDialogProps> = ({ onClaimDevice }) => {
             <Button 
               type="submit"
               disabled={!isValid}
-              className="w-full sm:w-auto order-1 sm:order-2 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto order-1 sm:order-2 bg-mainBlue text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed"
             >
               Claim Device
             </Button>

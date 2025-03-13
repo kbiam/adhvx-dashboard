@@ -299,7 +299,7 @@ const onSubmit = async (data: AddWorkOrderFormValues) => {
             <Button 
               type="submit"
               disabled={!isValid}
-              className="w-full sm:w-auto order-1 sm:order-2 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto order-1 sm:order-2 bg-mainBlue text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed"
             >
               Create Work Order
             </Button>

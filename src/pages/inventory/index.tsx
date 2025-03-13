@@ -454,7 +454,7 @@ const Inventory = () => {
   }
 
   return (
-    <div className="p-4 sm:p-4 md:py-6 bg-white dark:bg-[#121212] min-h-screen">
+    <div className="p-4 sm:p-4 md:py-6  min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center mb-6">
         <div className="flex gap-4 items-center">
@@ -472,7 +472,7 @@ const Inventory = () => {
           {isAdmin && (
             <Button 
               variant="default" 
-              className="flex items-center bg-blue-600 hover:bg-blue-700 dark:text-white"
+              className="flex items-center bg-mainBlue hover:bg-blue-700 dark:text-white"
               onClick={() => setAddDialogOpen(true)}
             >
               <PlusCircle className="mr-2 h-4 w-4" /> Add New Stock
@@ -482,9 +482,9 @@ const Inventory = () => {
       </div>
 
       {/* Table Container */}
-      <div className="bg-white dark:bg-[#1a1a1a]">
+      <div className="bg-white dark:bg-[#1a1a1a] rounded-lg p-2">
         {/* Search Input */}
-        <div className="flex items-center py-4 px-4">
+        <div className="flex items-center py-4 px-2">
           <Input
             placeholder="Search products..."
             value={(table.getColumn("productName")?.getFilterValue() as string) ?? ""}

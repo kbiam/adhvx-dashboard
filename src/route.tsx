@@ -19,6 +19,7 @@ import DeviceManagement from "./pages/device_management";
 import Inventory from "./pages/inventory";
 import WorkOrders from "./pages/workOrders";
 import OTAUpdates from "./pages/otaUpdates";
+import MachineDashboard from "./pages/machineDashboard";
 
 const navItems = [
   {
@@ -83,6 +84,7 @@ export const AppRoutes = () => {
             <Route path="inventory" element={<Inventory />} />
             <Route path="workOrders" element={<WorkOrders />} />
             <Route path="ota" element={<OTAUpdates />} />
+            <Route path="machine/:machineId" element={<MachineDashboard/>} />
             <Route path="profilesettings" element={<ProfileSettings />} />
           </Route>
           <Route element={<PrivateRoute role="admin" />}>

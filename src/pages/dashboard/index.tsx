@@ -30,16 +30,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { AddMachine } from "./AddMachine";
+import { Link } from "react-router-dom";
 
 // Dummy data to simulate backend response
 const DUMMY_MACHINES = [
-  { _id: "MACHINE_001" },
-  { _id: "MACHINE_002" },
-  { _id: "MACHINE_003" },
+  { _id: "001" },
+  { _id: "002" },
+  { _id: "003" },
 ];
 
 const DUMMY_SENSOR_DATA = {
-  "MACHINE_001": {
+  "001": {
     machineId: "MACHINE_001",
     sensors: {
       "TEMP_SENSOR_01": [
@@ -50,18 +51,20 @@ const DUMMY_SENSOR_DATA = {
         { parameter: "pressure", value: "1013 hPa", timestamp: new Date().toISOString() },
         { parameter: "altitude", value: "150m", timestamp: new Date().toISOString() }
       ]
-    }
+    },
+    link:"001"
   },
-  "MACHINE_002": {
+  "002": {
     machineId: "MACHINE_002",
     sensors: {
       "VOLT_SENSOR_01": [
         { parameter: "voltage", value: "220V", timestamp: new Date().toISOString() },
         { parameter: "current", value: "5A", timestamp: new Date().toISOString() }
       ]
-    }
+    },
+    link:"002"
   },
-  "MACHINE_003": {
+  "003": {
     machineId: "MACHINE_003",
     sensors: {
       "FLOW_SENSOR_01": [
@@ -71,7 +74,8 @@ const DUMMY_SENSOR_DATA = {
       "TEMP_SENSOR_02": [
         { parameter: "temperature", value: "82.3°C", timestamp: new Date().toISOString() }
       ]
-    }
+    },
+    link:"003"
   }
 };
 const DUMMY_ALERTS = [
@@ -123,7 +127,35 @@ export const Dashboard = () => {
   const {theme} = useTheme()
   const [machines, setMachines] = useState<Machine[]>(DUMMY_MACHINES);
   const [selectedTab, setSelectedTab] = useState('Overall Performance');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredMachines, setFilteredMachines] = useState<Machine[]>(DUMMY_MACHINES);
   const isDark = theme === "dark";
+
+    // Function to handle search input changes
+    const handleSearchChange = (e) => {
+      const value = e.target.value;
+      setSearchTerm(value);
+    };
+
+    useEffect(()=>{
+      if(!searchTerm.trim()){
+        setFilteredMachines(DUMMY_MACHINES);
+        return
+      }
+      const lowerCaseSearch = searchTerm.toLowerCase();
+      const filtered = machines.filter(machine => {
+        const machineData = DUMMY_SENSOR_DATA[machine._id];
+        if (!machineData) return false;
+        
+        return(
+          machineData.machineId.toLowerCase().includes(lowerCaseSearch)
+
+        )
+      })
+      setFilteredMachines(filtered)
+
+
+    },[searchTerm,machines])
 
   const addNewMachine = (name: string, id: string) => {
     // Create a new machine object
@@ -170,6 +202,8 @@ export const Dashboard = () => {
           <Input 
             placeholder="Search machines..." 
             className="pl-10 "
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -180,9 +214,15 @@ export const Dashboard = () => {
         </div>
 
         <div className="flex flex-col gap-3 overflow-y-auto ">
-          {machines.map((machine) => (
-            <MachineView key={machine._id} machineId={machine._id} />
-          ))}
+        {filteredMachines.length > 0 ? (
+            filteredMachines.map((machine) => (
+              <MachineView key={machine._id} machineId={machine._id} isDark={isDark}/>
+            ))
+          ) : (
+            <div className="text-center text-gray-500 p-4">
+              No machines found matching "{searchTerm}"
+            </div>
+          )}  
         </div>
 
         <div className="flex justify-center mt-2 mb-4">
@@ -197,10 +237,10 @@ export const Dashboard = () => {
                 <p className="text-2xl font-medium">Dashboard</p>
               </div>
               <div className="flex items-center gap-4">
-                <button className="px-6 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="px-6 py-1 bg-mainBlue text-white rounded-lg hover:bg-blue-700 transition-colors">
                   Manage
                 </button>
-                <button className="px-6 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="px-6 py-1 bg-mainBlue text-white rounded-lg hover:bg-blue-700 transition-colors">
                   User Management
                 </button>
                 <button className="p-2 rounded-full bg-card hover:bg-gray-200 dark:hover:bg-gray-700">
@@ -215,7 +255,7 @@ export const Dashboard = () => {
                 onClick={() => setSelectedTab(tab)}
                 className={`px-4 md:px-0 py-2  transition-colors text-sm focus:outline-none  ${
                   selectedTab === tab
-                    ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-transparent dark:bg-transparent border-b-2'
+                    ? 'border-mainBlue text-mainBlue dark:text-blue-400 bg-transparent dark:bg-transparent border-b-2'
                   : 'bg-transparent dark:bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 border-gray-300 dark:border-gray-700'
                 }`}
               >
@@ -233,7 +273,7 @@ export const Dashboard = () => {
                     <div className="h-full text-left ">
                             <h3 className="text-xl font-semibold ">Company Name</h3>
                             <p className="text-lg text-red-500 dark:text-red-400 mb-3">Contact Info.</p>
-                            <Button className="bg-blue-600 hover:bg-blue-700 transition-colors h-8 px-4 shadow-sm">
+                            <Button className="bg-mainBlue hover:bg-blue-700 transition-colors h-8 px-4 shadow-sm">
                               <ArrowRight size={16}/>
                             </Button>
                     </div>
@@ -286,9 +326,9 @@ export const Dashboard = () => {
                     <div className="flex flex-row md:flex-row gap-6 md:gap-8 items-start w-full md:w-1/2 justify-around">
                       <div className="text-left flex flex-col items-start gap-2 w-full md:w-1/3">
                         <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
-                          <ClipboardCheck className="text-blue-600 dark:text-blue-400" size={18}/>
+                          <ClipboardCheck className="text-mainBlue dark:text-blue-400" size={18}/>
                         </div>
-                        <p className="text-xl font-medium text-blue-600 dark:text-blue-400">$5.3k</p>
+                        <p className="text-xl font-medium text-mainBlue dark:text-blue-400">$5.3k</p>
                         <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">Open Work Orders</p>
                       </div>
                       
@@ -320,7 +360,7 @@ export const Dashboard = () => {
               value={75}
               text="18h"
               pathColor="#3066BE"
-              Icon={<Clock className="w-5 h-5 text-blue-600" />}
+              Icon={<Clock className="w-5 h-5 text-mainBlue" />}
               isDark={isDark}
             />
           <MetricCard
@@ -476,9 +516,10 @@ const MetricCard: React.FC<MetricCardProps> = ({
 
 interface MachineViewProps {
   machineId: string;
+  isDark:boolean
 }
 
-const MachineView = ({ machineId }: MachineViewProps) => {
+const MachineView = ({ machineId, isDark }: MachineViewProps) => {
   const [data, setData] = useState(DUMMY_SENSOR_DATA[machineId]);
 
   // Simulate real-time updates
@@ -504,22 +545,24 @@ const MachineView = ({ machineId }: MachineViewProps) => {
   if (!data) return null;
 
   return (
-    <Card className="border-2">
-      <CardHeader>
-        <CardTitle className="text-left flex items-center gap-2">
-          <CpuIcon className="h-5 w-5" />
-          {data.machineId}
-        </CardTitle>
-        <CardDescription className="text-left flex items-center gap-2">
-          Active Sensors: {Object.keys(data.sensors || {}).length}
-        </CardDescription>
-      </CardHeader>
-      {/* <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Object.entries(data.sensors || {}).map(([key, val]) => (
-          <SensorView key={key} name={key} data={val} />
-        ))}
-      </CardContent> */}
-    </Card>
+    <Link to={`/machine/${machineId}`}>
+      <Card className="border hover:border-gray-400 transition-all duration-200">
+        <CardHeader>
+          <CardTitle className="text-left flex items-center gap-2">
+            <img className="h-5 w-5" src={`/machineIcon/${isDark?'iconBlackBg.png':'icon.png'}`} />
+            {data.machineId}
+          </CardTitle>
+          <CardDescription className="text-left flex items-center gap-2">
+            Active Sensors: {Object.keys(data.sensors || {}).length}
+          </CardDescription>
+        </CardHeader>
+        {/* <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Object.entries(data.sensors || {}).map(([key, val]) => (
+            <SensorView key={key} name={key} data={val} />
+          ))}
+        </CardContent> */}
+      </Card>
+    </Link>
   );
 };
 

@@ -198,7 +198,7 @@ const EditStockDialog = ({
             >
               Cancel
             </Button>
-            <Button type="submit" className='w-full sm:w-auto order-1 sm:order-2 bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed'>Save Changes</Button>
+            <Button type="submit" className='w-full sm:w-auto order-1 sm:order-2 bg-mainBlue text-white hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed'>Save Changes</Button>
           </DialogFooter>
         </form>
       </DialogContent>
