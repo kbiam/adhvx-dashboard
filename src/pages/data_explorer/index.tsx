@@ -131,7 +131,7 @@ export const DataExplorer = () => {
         setSensors(sensorData.sensors);
       }
     };
-     fetchSensors();
+    //  fetchSensors();
   }, [selectedMachine]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ export const DataExplorer = () => {
       );
       setMachines(machineData.machines);
     };
-    fetchMachines();
+    // fetchMachines();
   }, []);
 
   async function fetchData(viewType: string) {

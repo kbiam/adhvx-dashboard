@@ -14,7 +14,16 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
-import { ChevronRight, Plus, ChevronLeft } from "lucide-react";
+import { ChevronRight,   Activity,        // For Utilization Rate
+  AlertCircle,     // For Downtime
+  Clock,           // For Operating Hours
+  ArrowRight,      // For Wire Feed Rate
+  Timer,           // For Machining Time
+  Power,           // For Machine State
+  Disc,            // For Spools/Wire
+  Filter,          // For Filter Life
+  Zap,             // For Electricity
+  Thermometer  } from "lucide-react";
 
 // Example data (replace with your API calls)
 const MACHINE_DATA = {
@@ -49,7 +58,22 @@ const MACHINE_DATA = {
       { id: 2, name: "Resin Tank", machine: "Ion Tank", status: "Still Good", statusColor: "bg-green-500" },
       { id: 3, name: "Carbon Filter", machine: "Water Tank", status: "Need Change", statusColor: "bg-yellow-500" },
       { id: 4, name: "Brass Wire", machine: "Machine", status: "Don't Replace", statusColor: "bg-orange-500" }
-    ]
+    ],
+    machineMetrics: {
+      utilizationRate: 78.5,
+      downtime: 2.3,
+      operatingHours: 21.7,
+      wireFeedRate: 12.4,
+      machiningTime: 18.2,
+      machineState: "RUNNING",
+      spoolsWire: 3.5,
+      filterLife: 65,
+      electricity: {
+        consumption: 145.2,
+        cost: 23.45
+      },
+      waterTemperature: 24.7
+    }
   },
   "MACHINE_002": {
     id: "MACHINE_002",
@@ -80,7 +104,22 @@ const MACHINE_DATA = {
       { id: 2, name: "Resin Tank", machine: "Ion Tank", status: "Still Good", statusColor: "bg-green-500" },
       { id: 3, name: "Carbon Filter", machine: "Water Tank", status: "Good", statusColor: "bg-green-500" },
       { id: 4, name: "Brass Wire", machine: "Machine", status: "Need Replace", statusColor: "bg-red-500" }
-    ]
+    ],
+    machineMetrics: {
+      utilizationRate: 65.2,
+      downtime: 4.7,
+      operatingHours: 19.3,
+      wireFeedRate: 10.8,
+      machiningTime: 15.7,
+      machineState: "WAITING",
+      spoolsWire: 2.8,
+      filterLife: 37,
+      electricity: {
+        consumption: 132.6,
+        cost: 21.18
+      },
+      waterTemperature: 25.3
+    }
   },
   "MACHINE_003": {
     id: "MACHINE_003",
@@ -113,7 +152,22 @@ const MACHINE_DATA = {
       { id: 2, name: "Resin Tank", machine: "Ion Tank", status: "Still Good", statusColor: "bg-green-500" },
       { id: 3, name: "Carbon Filter", machine: "Water Tank", status: "Need Change", statusColor: "bg-yellow-500" },
       { id: 4, name: "Brass Wire", machine: "Machine", status: "Don't Replace", statusColor: "bg-orange-500" }
-    ]
+    ],
+    machineMetrics: {
+      utilizationRate: 81.3,
+      downtime: 1.8,
+      operatingHours: 22.2,
+      wireFeedRate: 13.2,
+      machiningTime: 19.5,
+      machineState: "RUNNING",
+      spoolsWire: 4.2,
+      filterLife: 78,
+      electricity: {
+        consumption: 152.7,
+        cost: 24.83
+      },
+      waterTemperature: 23.9
+    }
   }
 };
 
@@ -194,113 +248,222 @@ export const MachineDashboard = () => {
       {/* Machine Detail Sections */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
             {/* Main Content Area - Takes up 9/12 of the grid on large screens */}
-            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Top Row - 3 Equal Cards */}
+              <div className="lg:col-span-8 grid grid-cols-1 gap-6 ">
                 <Card className="shadow-sm">
-                <CardHeader>
-                    <CardTitle className="text-lg">Maintenance Status</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                    <div className="flex justify-center mb-4">
-                    <div className="w-24 h-24 sm:w-32 sm:h-32">
-                        <CircularProgressbar
-                        value={75}
-                        text={`${machine.serviceTime}h`}
-                        styles={buildStyles({
-                            textSize: '16px',
-                            pathColor: `rgba(62, 152, 199, ${75 / 100})`,
-                            textColor: isDark ? '#cdcdcd' : '#333',
-                            trailColor: isDark ? '#1f1f1f' : '#e6e6e6',
-                            pathTransitionDuration: 0.5,
-                        })}
-                        />
-                        <p className="text-center mt-2 text-sm text-gray-500">Service Time</p>
-                    </div>
-                    </div>
-                </CardContent>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">Machine Metrics</CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                      {/* Machine State */}
+                          <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                              <div className="flex justify-between items-center mb-2">
+                                <div className="flex items-center">
+                                  <div className="p-2 bg-gray-100 rounded-full mr-2">
+                                    <Power size={18} className="text-gray-700" />
+                                  </div>
+                                  <h3 className="font-medium text-left">Machine State</h3>
+                                </div>
+                              </div>
+                              <div className="flex items-center">
+                                <div className={`mr-2 text-xl font-semibold px-3 py-1 rounded-full flex items-center ${
+                                  machine.machineMetrics.machineState === "RUNNING" ? "bg-green-100 text-green-700" :
+                                  machine.machineMetrics.machineState === "WAITING" ? "bg-yellow-100 text-yellow-700" :
+                                  machine.machineMetrics.machineState === "IDLE" ? "bg-blue-100 text-blue-700" :
+                                  "bg-red-100 text-red-700"
+                                }`}>
+                                  <div className={`w-2 h-2 rounded-full mr-2 ${
+                                    machine.machineMetrics.machineState === "RUNNING" ? "bg-green-500" :
+                                    machine.machineMetrics.machineState === "WAITING" ? "bg-yellow-500" :
+                                    machine.machineMetrics.machineState === "IDLE" ? "bg-blue-500" :
+                                    "bg-red-500"
+                                  }`}></div>
+                                  {machine.machineMetrics.machineState}
+                                </div>
+                              </div>
+                            </div>
+
+                      {/* Utilization Rate */}
+                      <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                        <div className="flex justify-between items-center mb-2">
+                          <div className="flex items-center">
+                            <div className="p-2 bg-blue-100 rounded-full mr-2">
+                              <Activity size={18} className="text-blue-700" />
+                            </div>
+                            <h3 className="font-medium text-left">Utilization Rate</h3>
+                          </div>
+                        </div>
+                        <div className="flex items-end">
+                          <div className="mr-2 text-3xl font-semibold text-blue-800">
+                            {machine.machineMetrics.utilizationRate}
+                          </div>
+                          <span className="text-blue-600 text-base">/ hour</span>
+                        </div>
+                      </div>
+
+                        {/* Downtime */}
+                        <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                          <div className="flex justify-between items-center mb-2">
+                            <div className="flex items-center">
+                              <div className="p-2 bg-red-100 rounded-full mr-2">
+                                <AlertCircle size={18} className="text-red-700" />
+                              </div>
+                              <h3 className="font-medium text-left">Downtime</h3>
+                            </div>
+                          </div>
+                          <div className="flex items-end">
+                            <div className="mr-2 text-3xl font-semibold text-red-800">
+                              {machine.machineMetrics.downtime}
+                            </div>
+                            <span className="text-red-600 text-base">hours</span>
+                          </div>
+                        </div>
+
+                          {/* Operating Hours */}
+                          <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                            <div className="flex justify-between items-center mb-2">
+                              <div className="flex items-center">
+                                <div className="p-2 bg-green-100 rounded-full mr-2">
+                                  <Clock size={18} className="text-green-700" />
+                                </div>
+                                <h3 className="font-medium text-left">Operating Hours</h3>
+                              </div>
+                            </div>
+                            <div className="flex items-end">
+                              <div className="mr-2 text-3xl font-semibold text-green-800">
+                                {machine.machineMetrics.operatingHours}
+                              </div>
+                              <span className="text-green-600 text-base">total</span>
+                            </div>
+                          </div>
+
+                          {/* Wire Feed Rate */}
+                            <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                              <div className="flex justify-between items-center mb-2">
+                                <div className="flex items-center">
+                                  <div className="p-2 bg-purple-100 rounded-full mr-2">
+                                    <ArrowRight size={18} className="text-purple-700" />
+                                  </div>
+                                  <h3 className="font-medium text-left">Wire Feed Rate</h3>
+                                </div>
+                              </div>
+                              <div className="flex items-end">
+                          <div className="mr-2 text-3xl font-semibold text-purple-800">
+                                  {machine.machineMetrics.wireFeedRate}
+                                </div>
+                                <span className="text-purple-600 text-base">m/min</span>
+                              </div>
+                          </div>
+
+                            {/* Machining Time */}
+                            <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                              <div className="flex justify-between items-center mb-2">
+                                <div className="flex items-center">
+                                  <div className="p-2 bg-indigo-100 rounded-full mr-2">
+                                    <Timer size={18} className="text-indigo-700" />
+                                  </div>
+                                  <h3 className="font-medium text-left">Machining Time</h3>
+                                </div>
+                              </div>
+                              <div className="flex items-end">
+                                <div className="mr-2 text-3xl font-semibold text-indigo-800">
+                                  {machine.machineMetrics.machiningTime}
+                                </div>
+                                <span className="text-indigo-600 text-base">hours</span>
+                              </div>
+                            </div>
+
+
+                            {/* Spools/Wire */}
+                            <div className="p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-between ">
+                              <div className="flex justify-between items-center mb-2">
+                                <div className="flex items-center">
+                                  <div className="p-2 bg-amber-100 rounded-full mr-2">
+                                    <Disc size={18} className="text-amber-700" />
+                                  </div>
+                                  <h3 className="font-medium text-left">No of spools / wire</h3>
+                                </div>
+                              </div>
+                              <div className="flex items-end">
+                                <div className="mr-2 text-3xl font-semibold text-amber-800">
+                                  {machine.machineMetrics.spoolsWire}
+                                </div>
+                                <span className="text-amber-600 text-base">units</span>
+                              </div>
+                            </div>
+
+                              {/* Filter Life */}
+                              <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                                <div className="flex justify-between items-center mb-2">
+                                  <div className="flex items-center">
+                                    <div className="p-2 bg-cyan-100 rounded-full mr-2">
+                                      <Filter size={18} className="text-cyan-700" />
+                                    </div>
+                                    <h3 className="font-medium text-left">Filter Life</h3>
+                                  </div>
+                                </div>
+                                <div className="flex items-center">
+                                  <div className="w-16 h-16 mr-4">
+                                    <CircularProgressbar 
+                                      value={machine.machineMetrics.filterLife} 
+                                      text={`${machine.machineMetrics.filterLife}%`} 
+                                      styles={buildStyles({
+                                        textSize: '28px',
+                                        pathColor: machine.machineMetrics.filterLife > 50 ? '#10b981' : 
+                                                machine.machineMetrics.filterLife > 20 ? '#f59e0b' : '#ef4444',
+                                        textColor: isDark ? '#fff' : '#333',
+                                      })}
+                                    />
+                                  </div>
+                                  <span className="text-cyan-600 text-base ml-2">
+                                    {machine.machineMetrics.filterLife > 50 ? "Good" : 
+                                    machine.machineMetrics.filterLife > 20 ? "Warning" : "Critical"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Electricity */}
+                              <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                                <div className="flex justify-between items-center mb-2">
+                                  <div className="flex items-center">
+                                    <div className="p-2 bg-yellow-100 rounded-full mr-2">
+                                      <Zap size={18} className="text-yellow-700" />
+                                    </div>
+                                    <h3 className="font-medium text-left">Electricity</h3>
+                                  </div>
+                                </div>
+                                <div className="flex items-end ">
+                                  <div className="mr-2 text-3xl font-semibold text-yellow-800">
+                                    {machine.machineMetrics.electricity.consumption}
+                                  </div>
+                                  <span className="text-yellow-600 text-base">kWh</span>
+                                </div>
+                              </div>
+
+                              {/* Water Temperature */}
+                              <div className="p-4 rounded-lg shadow-sm border border-gray-100 ">
+                                <div className="flex justify-between items-center mb-2">
+                                  <div className="flex items-center">
+                                    <div className="p-2 bg-teal-100 rounded-full mr-2">
+                                      <Thermometer size={18} className="text-teal-700" />
+                                    </div>
+                                    <h3 className="font-medium text-left">Water Temperature</h3>
+                                  </div>
+                                </div>
+                                <div className="flex items-end">
+                                  <div className="mr-2 text-3xl font-semibold text-teal-800">
+                                    {machine.machineMetrics.waterTemperature}
+                                  </div>
+                                  <span className="text-teal-600 text-base">°C</span>
+                                </div>
+                              </div>
+                            </div>
+                  </CardContent>
                 </Card>
 
-                <Card className="shadow-sm">
-                <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Maintenance Items</CardTitle>
-                </CardHeader>
-                <CardContent className="p-4">
-                    <div className="space-y-2">
-                    {machine.maintenanceItems.map((item) => (
-                        <div key={item.id} className="flex items-center p-2 rounded-md border border-gray-200 dark:border-gray-700">
-                        <div 
-                            className={`w-3 h-3 rounded-full mr-2 ${
-                            item.type === 'primary' ? 'bg-blue-500' : 
-                            item.type === 'danger' ? 'bg-red-500' : 'bg-yellow-500'
-                            }`}
-                        />
-                        <span className="text-sm truncate">{item.name}</span>
-                        </div>
-                    ))}
-                    <Button variant="outline" className="w-full mt-2 border-dashed">
-                        <Plus size={16} className="mr-2" />
-                        <span className="text-sm">Add Parameters</span>
-                    </Button>
-                    </div>
-                </CardContent>
-                </Card>
-
-                <Card className="shadow-sm">
-                <CardHeader className=''>
-                    <CardTitle className="text-lg">Reminder</CardTitle>
-                </CardHeader>
-                <CardContent className="">
-                    <div className="space-y-2">
-                    {machine.urgentRecalls.map((recall, index) => (
-                        <div key={index} className="grid grid-cols-3 text-sm p-1">
-                        <div className="text-gray-800 dark:text-gray-200 truncate">Urgent Safety Recall</div>
-                        <div className="text-gray-500 truncate">{recall.dueDate}</div>
-                        <div className="text-gray-500 truncate">{recall.completionDate}</div>
-                        </div>
-                    ))}
-                    <Button size="sm" className="mt-2 bg-mainBlue hover:bg-blue-700 text-white">
-                        <Plus size={14} className="mr-1" />
-                        Add New
-                    </Button>
-                    </div>
-                </CardContent>
-                </Card>
-
-                {/* Full Width Card */}
-                <Card className="shadow-sm md:col-span-3">
-                <CardHeader>
-                    <CardTitle className="text-lg">Consumables</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {machine.consumables.map((item) => (
-                        <div key={item.id} className="flex flex-col items-center p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
-                        <div className="mb-2">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            {item.name.includes("Coolant") && (
-                                <path d="M12 5C8.5 5 5 8.5 5 12C5 15.5 8.5 19 12 19C15.5 19 19 15.5 19 12C19 8.5 15.5 5 12 5Z" stroke="currentColor" strokeWidth="2" />
-                            )}
-                            {item.name.includes("Resin") && (
-                                <path d="M12 2L2 7L12 12L22 7L12 2Z M2 17L12 22L22 17 M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" />
-                            )}
-                            {item.name.includes("Carbon") && (
-                                <path d="M7 22H17 M12 2V6 M8 6H16V14C16 16.2091 14.2091 18 12 18C9.79086 18 8 16.2091 8 14V6Z" stroke="currentColor" strokeWidth="2" />
-                            )}
-                            {item.name.includes("Wire") && (
-                                <path d="M9 2V22 M15 2V22 M9 12H15" stroke="currentColor" strokeWidth="2" />
-                            )}
-                            </svg>
-                        </div>
-                        <h3 className="text-base font-medium text-center">{item.name}</h3>
-                        <p className="text-sm text-gray-500 text-center">{item.machine}</p>
-                        <div className={`w-full h-1 mt-2 ${item.statusColor}`}></div>
-                        <p className="text-xs mt-1 text-center">{item.status}</p>
-                        </div>
-                    ))}
-                    </div>
-                </CardContent>
-                </Card>
-            </div>
+              
+              </div>
 
             {/* Sidebar - Takes up 3/12 of the grid on large screens */}
             <div className="lg:col-span-4 grid grid-cols-1 gap-6">
